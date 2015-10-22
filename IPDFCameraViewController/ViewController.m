@@ -31,7 +31,7 @@
     [super viewDidLoad];
     
     [self.cameraViewController setupCameraView];
-    [self.cameraViewController setEnableBorderDetection:YES];
+    self.cameraViewController.borderDetectionEnabled  = YES;
     [self updateTitleLabel];
 }
 
@@ -65,7 +65,7 @@
 
 - (void)focusIndicatorAnimateToPoint:(CGPoint)targetPoint
 {
-    [self.focusIndicator setCenter:targetPoint];
+    (self.focusIndicator).center = targetPoint;
     self.focusIndicator.alpha = 0.0;
     self.focusIndicator.hidden = NO;
     
@@ -84,23 +84,23 @@
 
 - (IBAction)borderDetectToggle:(id)sender
 {
-    BOOL enable = !self.cameraViewController.isBorderDetectionEnabled;
+    BOOL enable = !self.cameraViewController.borderDetectionEnabled;
     [self changeButton:sender targetTitle:(enable) ? @"CROP On" : @"CROP Off" toStateEnabled:enable];
-    self.cameraViewController.enableBorderDetection = enable;
+    self.cameraViewController.borderDetectionEnabled = enable;
     [self updateTitleLabel];
 }
 
 - (IBAction)filterToggle:(id)sender
 {
-    [self.cameraViewController setCameraViewType:(self.cameraViewController.cameraViewType == IPDFCameraViewTypeBlackAndWhite) ? IPDFCameraViewTypeNormal : IPDFCameraViewTypeBlackAndWhite];
+    (self.cameraViewController).cameraViewType = (self.cameraViewController.cameraViewType == IPDFCameraViewTypeBlackAndWhite) ? IPDFCameraViewTypeNormal : IPDFCameraViewTypeBlackAndWhite;
     [self updateTitleLabel];
 }
 
 - (IBAction)torchToggle:(id)sender
 {
-    BOOL enable = !self.cameraViewController.isTorchEnabled;
+    BOOL enable = !self.cameraViewController.torchEnabled;
     [self changeButton:sender targetTitle:(enable) ? @"FLASH On" : @"FLASH Off" toStateEnabled:enable];
-    self.cameraViewController.enableTorch = enable;
+    self.cameraViewController.torchEnabled = enable;
 }
 
 - (void)updateTitleLabel
@@ -130,9 +130,9 @@
 {
     __weak typeof(self) weakSelf = self;
     
-    [self.cameraViewController captureImageWithCompletionHander:^(NSString *imageFilePath)
+    [self.cameraViewController captureImageWithCompletionHander:^(UIImage *image)
     {
-        UIImageView *captureImageView = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:imageFilePath]];
+        UIImageView *captureImageView = [[UIImageView alloc] initWithImage:image];
         captureImageView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.7];
         captureImageView.frame = CGRectOffset(weakSelf.view.bounds, 0, -weakSelf.view.bounds.size.height);
         captureImageView.alpha = 1.0;
