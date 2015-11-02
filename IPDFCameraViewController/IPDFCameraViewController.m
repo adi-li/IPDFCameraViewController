@@ -50,10 +50,22 @@ BOOL rectangleDetectionConfidenceHighEnough;
 
 #pragma mark - Life cycle
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        [self subscribeNotifications];
+    }
+    return self;
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    [self subscribeNotifications];
+}
 
+- (void)subscribeNotifications
+{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_backgroundMode) name:UIApplicationWillResignActiveNotification object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_foregroundMode) name:UIApplicationDidBecomeActiveNotification object:nil];
